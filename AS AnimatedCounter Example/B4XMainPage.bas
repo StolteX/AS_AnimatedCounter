@@ -28,11 +28,6 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	
 	B4XPages.SetTitle(Me,"AS_AnimatedCounter Example")
 	
-	Sleep(4000)
-	AS_AnimatedCounter1.TextColor = xui.Color_Red
-	AS_AnimatedCounter1.Font = xui.CreateDefaultBoldFont(30)
-	AS_AnimatedCounter1.Refresh
-	
 End Sub
 
 #If B4J

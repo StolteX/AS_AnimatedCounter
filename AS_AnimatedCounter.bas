@@ -20,6 +20,8 @@ V2.00
 	-Add get and set Font - Call refresh if you change something
 	-Add get and set TextColor - Call refresh if you change something
 	-Add Refresh - Refresh the visuals
+V2.01
+	-BugFixes B4J animation is now visible
 #End If
 
 #DesignerProperty: Key: Duration, DisplayName: Animation Duration, FieldType: Int, DefaultValue: 250, Description:
@@ -39,7 +41,6 @@ Sub Class_Globals
 	Private number As Int
 	Private line As B4XView
 	Private lblTemplate As B4XView
-	
 End Sub
 
 Public Sub Initialize (Callback As Object, EventName As String)
@@ -163,6 +164,9 @@ Private Sub Base_Resize (Width As Double, Height As Double)
 		Dim iv As B4XView = ImageViews.Get(i)
 		'from right to left
 		left =  left - DigitWidth
+		#If B4J
+		If i >= mValue.Size Then Continue
+		#End If
 		iv.SetLayoutAnimated(0, left, TopFromValue(i), bmp.Width, mBase.Height * 10)
 		
 		iv.SetBitmap(bmp)
@@ -185,7 +189,7 @@ Private Sub TopFromValue (Digit As Int) As Int
 	#If B4A
 	If d = 0 Then Return 1
 	#End If
-	
+
 	Return -(mBase.Height * d )
 End Sub
 
@@ -301,15 +305,22 @@ Private Sub Values(v As Int,animated As Boolean)
 		For i = 0 To mdigits - 1
 			mValue.Add(v Mod 10)
 			v = v / 10
+			#If B4J
+			If i >= ImageViews.Size Then Continue
+			#End If
 			Dim iv As B4XView = ImageViews.Get(i)
 			Dim duration As Int = 0
 			If animated = True Then
 				duration = mDuration
 			End If
 			iv.SetLayoutAnimated(duration, iv.Left, TopFromValue(i), Max(1,iv.Width),Max(1,iv.Height))
+			#If B4J
+			If duration > 0 Then Sleep(duration)
+			#End If
 		Next
-
+		
 		Base_Resize(mBase.Width, mBase.Height)
+
 	End If
 	
 End Sub
